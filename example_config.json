@@ -1,0 +1,10 @@
+{
+    "suggest_converter": "GoogleChromeConverter",
+    "suggest_url_template": "https://www.google.com/complete/search?client=chrome-omni&gs_ri=chrome-ext-ansg&q={query}",
+    "suggest_headers":
+    {
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0"
+    },
+    "search_url_template": "https://www.google.com/search?q={query}",
+    "name": "Suggector 💀"
+}

@@ -1,0 +1,4 @@
+bbpb
+requests
+flask
+Flask-Caching
