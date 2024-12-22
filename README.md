@@ -68,3 +68,9 @@ Stuff to figure out before 1.0.0:
     * https://w3techs.com/technologies/history_details/pl-python/3
 
 * improve logging
+
+* research llm autocomplete
+    * https://news.ycombinator.com/item?id=37541093
+    * https://huggingface.co/models?search=next+word
+      * https://huggingface.co/allenai/t5-small-next-word-generator-qoogle
+      * https://huggingface.co/allenai/t5-small-squad2-next-word-generator-squad
