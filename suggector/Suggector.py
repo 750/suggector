@@ -2,14 +2,14 @@ import dataclasses
 import json
 import requests
 
-from converters import BaseConverter
-from converters import DEFAULT_CONVERTERS
-from injectors import DebugInjector
-from converters import SuggestEndpoint
-from converters.google_chrome_converter import GoogleChromeConverter
-from injectors.base_injector import BaseInjector
-from suggest.browser import Browser
-from suggest.models import Suggest
+from suggector.converters import BaseConverter
+from suggector.converters import DEFAULT_CONVERTERS
+from suggector.injectors import DebugInjector
+from suggector.converters import SuggestEndpoint
+from suggector.converters.google_chrome_converter import GoogleChromeConverter
+from suggector.injectors.base_injector import BaseInjector
+from suggector.suggest.browser import Browser
+from suggector.suggest.models import Suggest
 import urllib.parse
 
 

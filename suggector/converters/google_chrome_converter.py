@@ -3,11 +3,11 @@ import dataclasses
 import json
 
 import blackboxprotobuf
-from converters import BaseConverter
-from converters import SuggestEndpoint
-from suggest import Suggest
-from suggest import SuggestItem
-from suggest.browser import Browser
+from suggector.converters import BaseConverter
+from suggector.converters import SuggestEndpoint
+from suggector.suggest import Suggest
+from suggector.suggest import SuggestItem
+from suggector.suggest.browser import Browser
 
 @dataclasses.dataclass
 class EntityInfo:
@@ -46,7 +46,7 @@ class EntityInfo:
             "type": "string",
         },
     }
-    
+
     entity_id: str|None = None
     description: str|None = None
     image: str|None = None
@@ -56,7 +56,7 @@ class EntityInfo:
     action: int = None
     params: str = None
     site_url: str = None
-    
+
     def is_empty(self):
         return all([
             not self.description,
@@ -66,13 +66,13 @@ class EntityInfo:
             not self.action,
             not self.site_url,
         ])
-    
+
     @staticmethod
     def from_pb_b64(entity_info_pb_b64) -> 'EntityInfo':
         entity_info_pb = base64.b64decode(entity_info_pb_b64)
         entity_info_str, _ = blackboxprotobuf.protobuf_to_json(entity_info_pb, EntityInfo.PROTOBUF_SCHEMA)
         entity_info = json.loads(entity_info_str)
-        
+
         entity_id = entity_info.get("entity_id")  # probably google's internal id for entity
         description = entity_info.get("description")  # this is rendered on chrome
         image = entity_info.get("image")  # supports data:image/... urls
@@ -81,7 +81,7 @@ class EntityInfo:
         color = entity_info.get("color")  # chrome uses this instead of image if it can't be loaded
         params = entity_info.get("params")  # somehow lack of this parameter can make entity autofill search field - not desired
         site_url = entity_info.get("site_url")  # not used, probably google's internal stuff
-        
+
         return EntityInfo(
             color=color,
             params=params,
@@ -92,7 +92,7 @@ class EntityInfo:
             text=text,
             category=category,
         )
-        
+
     def to_pb_64(self) -> str:
         d = {k: v for k, v in dataclasses.asdict(self).items() if v}
         return base64.b64encode(blackboxprotobuf.encode_message(d, self.PROTOBUF_SCHEMA)).decode()
@@ -116,7 +116,7 @@ class GoogleChromeConverter(BaseConverter):
             Browser.CHROMIUM,
             Browser.YABRO,
         )
-    
+
     @staticmethod
     def decode_recursive(d):
         if isinstance(d, list):
@@ -125,25 +125,25 @@ class GoogleChromeConverter(BaseConverter):
             return {k: (dataclasses.asdict(EntityInfo.from_pb_b64(v)) if k == "google:entityinfo" else GoogleChromeConverter.decode_recursive(v)) for k, v in d.items()}
         else:
             return d
-    
+
     def load(self, raw_suggest: str):
         raw_suggest = json.loads(raw_suggest)
         query = raw_suggest[0]
         texts = raw_suggest[1]
         descriptions = raw_suggest[2]
-        
+
         items = [SuggestItem(i) for i in texts]
-        
+
         for idx, i in enumerate(descriptions):
             items[idx].description = i
-        
+
         suggest_meta = raw_suggest[4]
-    
+
         if "google:suggestdetail" in suggest_meta:
             for idx, i in enumerate(suggest_meta["google:suggestdetail"]):
                 if "google:entityinfo" in i:
                     entity_info = EntityInfo.from_pb_b64(i["google:entityinfo"])
-                    
+
                     items[idx].visible_text = entity_info.text
                     items[idx].description = entity_info.description
                     items[idx].image_url = entity_info.image
@@ -161,10 +161,10 @@ class GoogleChromeConverter(BaseConverter):
             query=query,
             items=items,
         )
-    
+
     def dump(self, suggest: Suggest):
         entity_infos = []
-        
+
         to_dump = [
             suggest.query,
             [i.text for i in suggest.items],
@@ -188,13 +188,13 @@ class GoogleChromeConverter(BaseConverter):
                 color=i.image_background_color or "#000000",
                 params="gs_ssp=1",
             )
-            
+
             # print(dataclasses.asdict(entity_info))
             # print(entity_info.is_empty())
-            
+
             if entity_info.is_empty():
                 entity_infos.append({})
             else:
                 entity_infos.append({"google:entityinfo": entity_info.to_pb_64()})
-        
+
         return to_dump

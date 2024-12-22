@@ -1,14 +1,15 @@
 from flask import Flask, Response, request, redirect
 import json
-from converters.base_converter import BaseConverter
-from injectors.base_injector import BaseInjector
-from suggector import Suggector
-from converters import SuggestEndpoint
-from suggest import BrowserConverter
-from suggest import Browser
-from suggest import BrowserNotSupportedException
-from suggest.browser import STYLE, list_to_table, pre, code
-from templates import prepare_opensearch_xml, prepare_opensearch_xml_link
+
+from .converters.base_converter import BaseConverter
+from suggector.injectors.base_injector import BaseInjector
+from suggector.Suggector import Suggector
+from suggector.converters import SuggestEndpoint
+from suggector.suggest import BrowserConverter
+from suggector.suggest import Browser
+from suggector.suggest import BrowserNotSupportedException
+from suggector.suggest.browser import STYLE, list_to_table, pre, code
+from suggector.templates import prepare_opensearch_xml, prepare_opensearch_xml_link
 import urllib.parse
 
 class SuggectorFlask(Flask):

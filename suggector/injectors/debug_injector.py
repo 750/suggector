@@ -1,5 +1,5 @@
-from injectors.base_injector import BaseInjector
-from suggest.models import Suggest, SuggestItem
+from suggector.injectors.base_injector import BaseInjector
+from suggector.suggest.models import Suggest, SuggestItem
 
 class DebugInjector(BaseInjector):
     def __init__(

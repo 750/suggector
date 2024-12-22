@@ -1,0 +1,1 @@
+from suggector.flask_app import run

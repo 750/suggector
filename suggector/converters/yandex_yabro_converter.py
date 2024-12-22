@@ -1,9 +1,9 @@
 import json
-from converters import SuggestEndpoint
-from suggest import Suggest
-from converters import BaseConverter
-from suggest import SuggestItem
-from suggest.browser import Browser
+from suggector.converters import SuggestEndpoint
+from suggector.suggest import Suggest
+from suggector.converters import BaseConverter
+from suggector.suggest import SuggestItem
+from suggector.suggest.browser import Browser
 
 
 class YandexYabroConverter(BaseConverter):
@@ -13,7 +13,7 @@ class YandexYabroConverter(BaseConverter):
             suggest_url_template="https://yandex.ru/suggest/suggest-browser?part={query}&brandID=yandex&rich=1&srv=browser_desktop&rich_nav=1",
             search_url_template="https://yandex.ru/search/?text={query}",
         )
-        
+
     @classmethod
     def get_browsers(cls) -> list[Browser]:
         return ()
@@ -23,14 +23,14 @@ class YandexYabroConverter(BaseConverter):
         query = raw_suggest[0]
         texts = raw_suggest[1]
         descriptions = raw_suggest[2]
-        
+
         items = [SuggestItem(i, relevance=1000-idx) for idx,i in enumerate(texts)]
-        
+
         for idx, i in enumerate(descriptions):
             items[idx].description = i
-        
+
         suggest_meta = raw_suggest[3]
-    
+
         if "google:suggestdetail" in suggest_meta:
             for idx, i in enumerate(suggest_meta["google:suggestdetail"]):
                 description = i.get("a")
@@ -38,7 +38,7 @@ class YandexYabroConverter(BaseConverter):
                 image_url = i.get("i")
                 # params = i.get("q")
                 visible_text = i.get("t")
-                
+
                 items[idx].description = description
                 items[idx].image_background_color = color
                 items[idx].image_url = image_url
@@ -48,6 +48,6 @@ class YandexYabroConverter(BaseConverter):
             query=query,
             items=items,
         )
-    
+
     def dump(self, suggest):
         raise NotImplementedError("No reason to implement: regular Chrome dump is supported")

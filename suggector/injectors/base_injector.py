@@ -1,6 +1,6 @@
 from abc import ABC
 from abc import abstractmethod
-from suggest.models import Suggest
+from suggector.suggest.models import Suggest
 
 
 class BaseInjector(ABC):

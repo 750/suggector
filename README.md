@@ -1,5 +1,12 @@
 ### suggector
 
+Inject your own items into browser suggest!
+
+Until published to pip, install with:
+```sh
+pip install git+https://github.com/750/suggector
+```
+
 ### How it works
 
 User configures their browser to use Suggector as their suggestions provider (autocomplete provider).
@@ -52,3 +59,12 @@ Stuff to figure out before 1.0.0:
 
 * support offline usage
     * not sure if this is needed but local-only injectors should work offline
+
+* make hello page user-friendly
+    * chrome: suggector should have been added
+    * firefox: right-click address bar -> add "Suggector" ({suggector_name})
+
+* maybe backport to something older than 3.10
+    * https://w3techs.com/technologies/history_details/pl-python/3
+
+* improve logging

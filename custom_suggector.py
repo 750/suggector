@@ -1,5 +1,5 @@
-from flask_app import run
-from injectors.timestamp_injector import TimestampInjector
+from suggector.flask_app import run
+from suggector.injectors import TimestampInjector
 
 run(
     name="Yagector 😎",
