@@ -66,6 +66,7 @@ Stuff to figure out before 1.0.0:
 
 * maybe backport to something older than 3.10
     * https://w3techs.com/technologies/history_details/pl-python/3
+    * https://gist.github.com/yunruse/326481cd75800c3824f9b63206d350a3
 
 * improve logging
 
@@ -74,3 +75,4 @@ Stuff to figure out before 1.0.0:
     * https://huggingface.co/models?search=next+word
       * https://huggingface.co/allenai/t5-small-next-word-generator-qoogle
       * https://huggingface.co/allenai/t5-small-squad2-next-word-generator-squad
+
