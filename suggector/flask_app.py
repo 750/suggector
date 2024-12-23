@@ -58,7 +58,7 @@ def index():
 @app.route("/icon/<char>.svg")
 def char_as_icon(char):
     char = char[0]
-    icon = render_template("char_icon.svg", char=char)
+    icon = render_template("char_icon.svg.template", char=char)
 
     return Response(icon, mimetype='image/svg+xml')
 
