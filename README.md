@@ -44,7 +44,7 @@ Stuff to figure out before 1.0.0:
     * firefox enables rich suggest depending on certain fields - we should automagically prefill these fields if the user forgot to do that
     * Firefox doesn't support urls in suggest - they are not even shown. We can return them in a form firefox doesn't recognise as urls and then redirect
 
-* render html and xml with flask's built-in engine instead of directly in code
+* ~~render html and xml with flask's built-in engine instead of directly in code~~ fixed in #1
 
 * injectors need to be able to inject independently of main suggector endpoint handling
     * e.g. some injectors can be run before or in parallel to fetching google's autosuggest
