@@ -1,4 +1,4 @@
-from flask import Flask, Response, request, redirect
+from flask import Flask, Response, request, redirect, render_template, url_for
 import json
 
 from .converters.base_converter import BaseConverter
@@ -8,8 +8,6 @@ from suggector.converters import SuggestEndpoint
 from suggector.suggest import BrowserConverter
 from suggector.suggest import Browser
 from suggector.suggest import BrowserNotSupportedException
-from suggector.suggest.browser import STYLE, list_to_table, pre, code
-from suggector.templates import prepare_opensearch_xml, prepare_opensearch_xml_link
 import urllib.parse
 
 class SuggectorFlask(Flask):
@@ -31,35 +29,43 @@ def index():
         unknown_browser = True
         browser = Browser.CHROMIUM
 
-    xml_link = prepare_opensearch_xml_link(
-        app.suggector.name,
-        browser
+    xml_link = render_template(
+        "opensearch_xml_link.html",
+        opensearch_xml_path=url_for("opensearch_xml", browser=browser),
+        name=app.suggector.name,
     )
 
     table = [
-        ("Browser", code(browser) + (f" - falling back to {code(browser)} because your browser couldn't be recognised ❌" if unknown_browser else "")),
-        ("User agent", pre(request.headers.get("User-agent"))),
+        ("Browser", f"❌ Couldn't recognise your browser, falling back to {browser}" if unknown_browser else browser),
+        ("User agent", request.headers.get("User-agent")),
     ]
 
     table.extend([(
-        pre(k),
-        pre(v if isinstance(v, str) else json.dumps(v, indent=2, ensure_ascii=False))
+        k,
+        v if isinstance(v, str) else json.dumps(v, indent=2, ensure_ascii=False)
     ) for k, v in app.suggector.to_dict().items()])
 
-    html_str = f"<style>{STYLE}</style>"+xml_link+"\n"+list_to_table(table)
+    html_str = render_template(
+        "index.html",
+        opensearch_xml_link=xml_link,
+        items=table,
+        opensearch_xml_path=url_for("opensearch_xml", browser=browser),
+        name=app.suggector.name,
+    )
 
     return Response(html_str, mimetype='text/html')
 
 @app.route("/icon/<char>.svg")
 def char_as_icon(char):
     char = char[0]
-    icon = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".90em" font-size="90">{char}</text></svg>'
+    icon = render_template("char_icon.svg", char=char)
 
     return Response(icon, mimetype='image/svg+xml')
 
 @app.route("/<browser:browser>/opensearch.xml")
 def opensearch_xml(browser):
-    xml = prepare_opensearch_xml(
+    xml = render_template(
+        "opensearch.xml",
         name=app.suggector.name,
         host=app.suggector.host,
         port=app.suggector.port,
