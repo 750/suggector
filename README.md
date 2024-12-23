@@ -35,6 +35,8 @@ Project version below 1.0.0 means that APIs are not yet stable
 
 Stuff to figure out before 1.0.0:
 
+* release a package on PyPI
+
 * image handling - provide helpers to create images without writing full `data:something...` urls
     * would also mean that we can
     * chrome doesn't support svg images in omnibox, but there could be a way to simplify converting svg to png:
