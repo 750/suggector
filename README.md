@@ -35,6 +35,25 @@ Project version below 1.0.0 means that APIs are not yet stable
 
 Stuff to figure out before 1.0.0:
 
+* think about a more general design
+    * initial implementation:
+        * there is a single search engine parser-dumper
+        * there are any number of injectors each injecting one after another
+        * problems arise:
+            * how to combine search engines?
+            * how to switch engine based on some condition?
+            * how to determine sorting order dynamically?
+    * proposed implementation:
+        * no difference between a search engine and an injector: they are the same thing conceptually
+            * naming: SuggestSource
+        * new: `combiners` combine results from different sources
+        * things to figure out:
+            * such design allows for directed acyclic graphs - out of scope for now
+            * async is simple: every source is launched asynchroniously, no need to work around search engine converter timings
+            * not sure if parsers and formatters should be connected anymore
+                * before: there is a single base class for both parsing and dumping
+                * after: there are separate base classes for parsing and dumping, old converter inherits from both
+
 * release a package on PyPI
 
 * image handling
