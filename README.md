@@ -37,10 +37,9 @@ Stuff to figure out before 1.0.0:
 
 * release a package on PyPI
 
-* image handling - provide helpers to create images without writing full `data:something...` urls
-    * would also mean that we can
-    * chrome doesn't support svg images in omnibox, but there could be a way to simplify converting svg to png:
-        * https://jsfiddle.net/e5m74Lka/ taken from here https://github.com/niklasvh/html2canvas/issues/3225
+* image handling
+    * provide helpers to create images without writing full `data:something...` urls
+    * chrome doesn't support svg in omnibox, here is a simple way to generate png with emoji: https://750.github.io/emoji2png
 
 * cross-browser compatibility handling
     * firefox enables rich suggest depending on certain fields - we should automagically prefill these fields if the user forgot to do that
