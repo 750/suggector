@@ -81,7 +81,7 @@ class Suggector:
                 item.image_url = f"http://{self.host}:{self.port}/icon/{urllib.parse.quote(image)}.svg"
                 # item.image_url = "https://www.svgrepo.com/show/528888/cat.svg"
 
-    def process(self, query: str, browser: Browser):
+    async def process(self, query: str, browser: Browser):
         raw_suggest = self.get_raw_suggest(query)
 
         converter = self._converter_by_name[self.suggest_endpoint.suggest_converter]

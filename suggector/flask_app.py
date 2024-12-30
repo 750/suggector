@@ -74,11 +74,11 @@ def opensearch_xml(browser):
     return Response(xml, mimetype='text/xml')
 
 @app.route("/suggest")
-def suggest():
+async def suggest():
     term = request.args['term']
     browser = request.args['browser']
 
-    result = app.suggector.process(query=term, browser=browser)
+    result = await app.suggector.process(query=term, browser=browser)
 
     return result
 
