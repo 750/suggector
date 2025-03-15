@@ -7,7 +7,7 @@ from werkzeug.routing import BaseConverter as RoutingBaseConverter
 class BrowserNotSupportedException(Exception):
     pass
 
-class Browser(StrEnum):
+class Browser:
 
     CHROMIUM = "chromium"
     FIREFOX = "firefox"
