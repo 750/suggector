@@ -5,7 +5,7 @@ class DebugInjector(BaseInjector):
     def __init__(
             self,
             url: str,
-            substring_trigger: str = "kekea"
+            substring_trigger: str
     ):
         self.url = url
         self.substring_trigger = substring_trigger

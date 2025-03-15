@@ -66,7 +66,7 @@ Stuff to figure out before 1.0.0:
 
 * ~~render html and xml with flask's built-in engine instead of directly in code~~ fixed in https://github.com/750/suggector/issues/1
 
-* injectors need to be able to inject independently of main suggector endpoint handling
+* ~~injectors need to be able to inject independently of main suggector endpoint handling~~ will be fixed by a more general design
     * e.g. some injectors can be run before or in parallel to fetching google's autosuggest
 
 * move from requests to something asynchronious
@@ -79,18 +79,19 @@ Stuff to figure out before 1.0.0:
 
 * support offline usage
     * not sure if this is needed but local-only injectors should work offline
+    * this needs thinking
 
 * make hello page user-friendly
     * chrome: suggector should have been added
     * firefox: right-click address bar -> add "Suggector" ({suggector_name})
 
-* maybe backport to something older than 3.10
+* ~~maybe backport to something older than 3.10~~ 3.10 will be EOL before this reaches 1.0.0 `:-)`
     * https://w3techs.com/technologies/history_details/pl-python/3
     * https://gist.github.com/yunruse/326481cd75800c3824f9b63206d350a3
 
 * improve logging
 
-* research llm autocomplete
+* ~~research llm autocomplete~~ out of scope
     * https://news.ycombinator.com/item?id=37541093
     * https://huggingface.co/models?search=next+word
       * https://huggingface.co/allenai/t5-small-next-word-generator-qoogle

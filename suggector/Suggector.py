@@ -31,7 +31,8 @@ class Suggector:
         self._injectors: list[BaseInjector] = []
 
         self.register_converters([i() for i in DEFAULT_CONVERTERS])
-        self.register_injectors([DebugInjector(f"http://{self.host}:{self.port}")])
+        self.register_injectors([DebugInjector(f"http://{self.host}:{self.port}", "hello")])
+        self.register_injectors([DebugInjector(f"http://{self.host}:{self.port}/kill", "kill")])
 
     def to_dict(self):
         return {

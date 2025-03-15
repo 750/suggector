@@ -1,3 +1,5 @@
+import os
+import signal
 from flask import Flask, Response, request, redirect, render_template, url_for
 import json
 
@@ -93,6 +95,9 @@ def search():
 
     return redirect(url)
 
+@app.route("/kill")
+def kill():
+    os.kill(os.getpid(), signal.SIGINT)
 
 def run(
         name: str = "Suggector",
