@@ -19,3 +19,8 @@ class BaseInjector(ABC):
         """
 
         raise NotImplementedError()
+
+class BaseSearchInjector(ABC):
+    @abstractmethod
+    def get_redirect_url(self, query: str) -> str:
+        raise NotImplementedError()

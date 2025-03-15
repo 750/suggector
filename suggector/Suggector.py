@@ -8,6 +8,7 @@ from suggector.injectors import DebugInjector
 from suggector.converters import SuggestEndpoint
 from suggector.converters.google_chrome_converter import GoogleChromeConverter
 from suggector.injectors.base_injector import BaseInjector
+from suggector.injectors.base_injector import BaseSearchInjector
 from suggector.suggest.browser import Browser
 from suggector.suggest.models import Suggest
 import urllib.parse
@@ -29,6 +30,7 @@ class Suggector:
 
         self.suggest_endpoint: SuggestEndpoint = None
         self._injectors: list[BaseInjector] = []
+        self._search_injectors: list[BaseSearchInjector] = []
 
         self.register_converters([i() for i in DEFAULT_CONVERTERS])
         self.register_injectors([DebugInjector(f"http://{self.host}:{self.port}", "hello")])
@@ -55,6 +57,9 @@ class Suggector:
 
     def register_injectors(self, injectors: list[BaseInjector]):
         self._injectors.extend(injectors)
+
+    def register_search_injectors(self, search_injectors: list[BaseSearchInjector]):
+        self._search_injectors.extend(search_injectors)
 
     def setup_endpoint(self, suggest_endpoint):
         if isinstance(suggest_endpoint, str):
@@ -92,7 +97,7 @@ class Suggector:
         for injector in self._injectors:
             did_inject = injector.inject(suggest)
 
-            print(f"{injector.get_injector_name()}: {did_inject}")
+            # print(f"{injector.get_injector_name()}: {did_inject}")
 
         self._render_image_urls(suggest)
 
@@ -101,6 +106,18 @@ class Suggector:
         result = dump_converter.dump(suggest)
 
         # print(json.dumps(result))
-        print(json.dumps(GoogleChromeConverter.decode_recursive(result)))
+        # print(json.dumps(GoogleChromeConverter.decode_recursive(result)))
 
         return result
+
+    def process_search_term(self, query: str):
+        """
+        Some queries will not be sent to suggest - we still want to be able to do something
+        https://github.com/750/suggector/issues/2
+        """
+
+        for i in self._search_injectors:
+            url = i.get_redirect_url(query)
+
+            if url:
+                return url

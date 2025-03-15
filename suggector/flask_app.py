@@ -4,7 +4,7 @@ from flask import Flask, Response, request, redirect, render_template, url_for
 import json
 
 from .converters.base_converter import BaseConverter
-from suggector.injectors.base_injector import BaseInjector
+from suggector.injectors.base_injector import BaseInjector, BaseSearchInjector
 from suggector.Suggector import Suggector
 from suggector.converters import SuggestEndpoint
 from suggector.suggest import BrowserConverter
@@ -86,12 +86,13 @@ async def suggest():
 
 @app.route("/search")
 def search():
-    term = request.args['term'].strip()
+    query = request.args['term'].strip()
 
-    if term.startswith(("http://", "https://")) and " " not in term:
-        return redirect(term)
+    redirect_url = app.suggector.process_search_term(query)
+    if redirect_url:
+        return redirect(redirect_url)
 
-    url = app.suggector.suggest_endpoint.search_url_template.format(query=urllib.parse.quote_plus(term))
+    url = app.suggector.suggest_endpoint.search_url_template.format(query=urllib.parse.quote_plus(query))
 
     return redirect(url)
 
@@ -103,6 +104,7 @@ def run(
         name: str = "Suggector",
         converters: list[BaseConverter] = None,
         injectors: list[BaseInjector] = None,
+        search_injectors: list[BaseSearchInjector] = None,
         suggest_endpoint: str|SuggestEndpoint = "GoogleChromeConverter",
         host: str = "127.0.0.1",
         port: int = 9099,
@@ -139,5 +141,8 @@ def run(
 
     if injectors:
         app.suggector.register_injectors(injectors)
+
+    if injectors:
+        app.suggector.register_search_injectors(search_injectors)
 
     app.run(host=host, port=port)
