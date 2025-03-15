@@ -28,4 +28,4 @@ class Browser:
 
 class BrowserConverter(RoutingBaseConverter):
     def to_python(self, value):
-        return Browser(value)
+        return value
