@@ -1,5 +1,4 @@
 from flask import Request
-from enum import StrEnum
 import html
 
 from werkzeug.routing import BaseConverter as RoutingBaseConverter
