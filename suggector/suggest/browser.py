@@ -11,6 +11,7 @@ class Browser:
     CHROMIUM = "chromium"
     FIREFOX = "firefox"
     YABRO = "yabro"
+    API = "api"
 
     @staticmethod
     def from_request(request: Request) -> 'Browser':

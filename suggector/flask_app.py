@@ -100,6 +100,13 @@ def search():
 def kill():
     os.kill(os.getpid(), signal.SIGINT)
 
+
+@app.after_request
+def after_request(response: Response) -> Response:
+    response.access_control_allow_origin = "*"
+    return response
+
+
 def run(
         name: str = "Suggector",
         converters: list[BaseConverter] = None,
